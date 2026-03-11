@@ -35,9 +35,25 @@ def buscar_pokemon_por_nombre(name):
             return pokemon
     return None
 
+
 @app.get("/showonepokemon/")
 def show_one_pokemon(name: str = Query(...)):
     pokemon = buscar_pokemon_por_nombre(name)
+
+    if pokemon:
+        return pokemon
+
+    return {"mensaje": "Pokemon no encontrado"}
+
+def buscar_pokemon_por_id(id):
+    for pokemon in all_pokemons:
+        if pokemon.id == id:
+            return pokemon
+    return None
+
+@app.get("/showonepokemonbyId/")
+def show_one_pokemon_by_id(id: int = Query(...)):
+    pokemon = buscar_pokemon_por_id(id)
 
     if pokemon:
         return pokemon
