@@ -5,7 +5,7 @@ from pokemons import pokemons
 
 app = FastAPI(
     title="Pre-parcial Pokemon API",
-    description="API hecha con FastAPI para consultar y enfrentar pokemones de primera generación",
+    description="API para consultar y enfrentar pokemones de primera generacion",
 )
 class Pokemon(BaseModel):
     id: int
@@ -15,7 +15,7 @@ class Pokemon(BaseModel):
     type: List[str]
 
     def leave_pokeball(self) -> str:
-        return f"{self.name} salió de la pokebola"
+        return f"{self.name} Salio de la pokebola"
     
 
 all_pokemons = [Pokemon(**pokemon) for pokemon in pokemons]
@@ -87,9 +87,21 @@ def pokemon_battle(name1: str = Query(...), name2: str = Query(...)):
         ganador = "Empate"
 
     return {
-        "pokemon_1": pokemon1.name,
-        "pokemon_2": pokemon2.name,
-        "salida_1": pokemon1.leave_pokeball(),
-        "salida_2": pokemon2.leave_pokeball(),
-        "winner": ganador
+        "Pokemon_1": pokemon1.name,
+        "Pokemon_2": pokemon2.name,
+        "Resultado_1": pokemon1.leave_pokeball(),
+        "Resultado_2": pokemon2.leave_pokeball(),
+        "Ganador": ganador
     }
+
+@app.get("/pokemonorderedby/")
+def pokemon_ordered_by(campo: str = Query("id"), orden: str = Query("asc")):
+    if campo not in ["id", "name", "attack", "live"]:
+        return {"mensaje": "Campo no valido"}
+
+    if orden == "desc":
+        pokemones_ordenados = sorted(all_pokemons, key=lambda pokemon: getattr(pokemon, campo), reverse=True)
+    else:
+        pokemones_ordenados = sorted(all_pokemons, key=lambda pokemon: getattr(pokemon, campo))
+
+    return pokemones_ordenados
