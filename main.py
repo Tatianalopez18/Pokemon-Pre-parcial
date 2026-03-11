@@ -28,3 +28,18 @@ def show_all_pokemons():
 def show_one_pokemons(name:str = Query(...)):
     pokemon = nombre_pokemon(name)
     return one_pokemons 
+
+def buscar_pokemon_por_nombre(name):
+    for pokemon in all_pokemons:
+        if pokemon.name.lower() == name.lower():
+            return pokemon
+    return None
+
+@app.get("/showonepokemon/")
+def show_one_pokemon(name: str = Query(...)):
+    pokemon = buscar_pokemon_por_nombre(name)
+
+    if pokemon:
+        return pokemon
+
+    return {"mensaje": "Pokemon no encontrado"}
