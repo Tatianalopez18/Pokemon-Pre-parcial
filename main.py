@@ -24,10 +24,6 @@ all_pokemons = [Pokemon(**pokemon) for pokemon in pokemons]
 def show_all_pokemons():
     return all_pokemons
 
-@app.get ("/showonepokemon/")
-def show_one_pokemons(name:str = Query(...)):
-    pokemon = nombre_pokemon(name)
-    return one_pokemons 
 
 def buscar_pokemon_por_nombre(name):
     for pokemon in all_pokemons:
